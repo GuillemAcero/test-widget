@@ -10,12 +10,15 @@ async function fetchStatus() {
     const incidentsList = document.getElementById('incidents-list');
     const maintenanceList = document.getElementById('maintenance-list');
 
+    // Set page status
     pageStatus.textContent = `Service: ${data.page.name} - Status: ${data.page.status}`;
 
+    // Clear previous entries
     incidentsList.innerHTML = '';
     maintenanceList.innerHTML = '';
 
-    if (data.activeIncidents.length > 0) {
+    // Check if 'activeIncidents' exists in the response
+    if (data.activeIncidents && data.activeIncidents.length > 0) {
       data.activeIncidents.forEach(incident => {
         let incidentItem = document.createElement('li');
         incidentItem.innerHTML = `
@@ -29,7 +32,8 @@ async function fetchStatus() {
       incidentsList.innerHTML = '<li>No active incidents</li>';
     }
 
-    if (data.activeMaintenances.length > 0) {
+    // Check if 'activeMaintenances' exists in the response
+    if (data.activeMaintenances && data.activeMaintenances.length > 0) {
       data.activeMaintenances.forEach(maintenance => {
         let maintenanceItem = document.createElement('li');
         maintenanceItem.innerHTML = `
@@ -49,5 +53,8 @@ async function fetchStatus() {
   }
 }
 
+// Run the fetch function on load
 fetchStatus();
+
+// Set an interval to update the status every X milliseconds
 setInterval(fetchStatus, refreshInterval);
