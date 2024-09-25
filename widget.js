@@ -1,12 +1,12 @@
-const apiEndpoint = "https://testfinder.instatus.com/summary.json";
+const apiEndpoint = "https://doofinder.instatus.com/summary.json";
 const refreshInterval = 60000;  // Adjust the interval as needed
 
 async function fetchStatus() {
   try {
     const response = await fetch(apiEndpoint);
-    const data = await response.json();
+    // const data = await response.json();
+    const data = {}
 
-    console.log(data)
 
     const pageStatus = document.getElementById('page-status');
     const statusIndicator = document.getElementById('status-indicator');
@@ -21,7 +21,7 @@ async function fetchStatus() {
         statusColor = '#6BBA47';  // Green for UP
         break;
       case 'HASISSUES':
-        statusText = 'Some problems detected';
+        statusText = 'Minor Outage';
         statusColor = '#FC9B5A';  // Orange for HASISSUES
         break;
       case 'UNDERMAINTENANCE':
@@ -39,7 +39,7 @@ async function fetchStatus() {
       
       // If any incident has impact "MAJOROUTAGE", set the bullet to red
       if (hasMajorOutage) {
-        statusText = 'Some problems detected';
+        statusText = 'Major Outage';
         statusColor = '#EE3D4C';  // Red for major outage
       }
     }
