@@ -4,12 +4,13 @@
 }
 
 .widget {
+  height: 32px;
   display: flex;
   align-items: center;
   user-select: none;
   text-decoration: none;
   gap: 0.5rem;
-  padding: 0.75rem 1rem;
+  padding: 0px 14px 0px 12px;
   border-radius: 4px;
   border: 1px solid  #E5E5E5;
   background: #F9F9FB;
@@ -20,21 +21,18 @@
 }
 
 .widget-status-indicator {
-  margin-top: -1px;
   border-radius: 9999px;
-  width: 1rem;
-  height: 1rem;
-  min-width: 1rem;
+  width: 14px;
+  height: 14px;
   flex-shrink: 0;
 }
 
 .widget-status-text {
-  margin-bottom: -1px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   color: #212529;
-  font-size: 16px;
+  font-size: 14px;
   font-style: normal;
   font-weight: 400;
   line-height: 18px; /* 128.571% */

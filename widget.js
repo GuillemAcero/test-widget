@@ -4,9 +4,7 @@ const refreshInterval = 60000;  // Adjust the interval as needed
 async function fetchStatus() {
   try {
     const response = await fetch(apiEndpoint);
-    // const data = await response.json();
-    const data = {}
-
+    const data = await response.json();
 
     const pageStatus = document.getElementById('page-status');
     const statusIndicator = document.getElementById('status-indicator');
