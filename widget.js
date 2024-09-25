@@ -1,4 +1,4 @@
-const apiEndpoint = "https://doofinder.instatus.com/summary.json";
+const apiEndpoint = "https://testfinder.instatus.com/summary.json";
 const refreshInterval = 60000;  // Adjust the interval as needed
 
 async function fetchStatus() {
@@ -6,50 +6,52 @@ async function fetchStatus() {
     const response = await fetch(apiEndpoint);
     const data = await response.json();
 
+    console.log(data)
+
     const pageStatus = document.getElementById('page-status');
-    const incidentsList = document.getElementById('incidents-list');
-    const maintenanceList = document.getElementById('maintenance-list');
+    const statusIndicator = document.getElementById('status-indicator');
 
-    // Set page status
-    pageStatus.textContent = `Service: ${data.page.name} - Status: ${data.page.status}`;
+    // Define the status and the corresponding text and color
+    let statusText = '';
+    let statusColor = '';
 
-    // Clear previous entries
-    incidentsList.innerHTML = '';
-    maintenanceList.innerHTML = '';
+    switch (data.page.status) {
+      case 'UP':
+        statusText = 'All systems operational';
+        statusColor = '#6BBA47';  // Green for UP
+        break;
+      case 'HASISSUES':
+        statusText = 'Some problems detected';
+        statusColor = '#FC9B5A';  // Orange for HASISSUES
+        break;
+      case 'UNDERMAINTENANCE':
+        statusText = 'Under maintenance';
+        statusColor = '#7B80D2';  // Blue-Purple for UNDERMAINTENANCE
+        break;
+      default:
+        statusText = 'Unknown status';
+        statusColor = '#D9D9D9';  // Grey for unknown status
+    }
 
-    // Check if 'activeIncidents' exists in the response
+    // Check if "activeIncidents" exists and process it
     if (data.activeIncidents && data.activeIncidents.length > 0) {
-      data.activeIncidents.forEach(incident => {
-        let incidentItem = document.createElement('li');
-        incidentItem.innerHTML = `
-          <strong>${incident.name}</strong> - ${incident.status} <br />
-          Impact: ${incident.impact} | Started: ${new Date(incident.started).toLocaleString()}<br />
-          <a href="${incident.url}" target="_blank">More Info</a>
-        `;
-        incidentsList.appendChild(incidentItem);
-      });
-    } else {
-      incidentsList.innerHTML = '<li>No active incidents</li>';
+      const hasMajorOutage = data.activeIncidents.some(incident => incident.impact === 'MAJOROUTAGE');
+      
+      // If any incident has impact "MAJOROUTAGE", set the bullet to red
+      if (hasMajorOutage) {
+        statusText = 'Some problems detected';
+        statusColor = '#EE3D4C';  // Red for major outage
+      }
     }
 
-    // Check if 'activeMaintenances' exists in the response
-    if (data.activeMaintenances && data.activeMaintenances.length > 0) {
-      data.activeMaintenances.forEach(maintenance => {
-        let maintenanceItem = document.createElement('li');
-        maintenanceItem.innerHTML = `
-          <strong>${maintenance.name}</strong> - ${maintenance.status} <br />
-          Starts at: ${new Date(maintenance.start).toLocaleString()}<br />
-          Duration: ${maintenance.duration} mins <br />
-          <a href="${maintenance.url}" target="_blank">More Info</a>
-        `;
-        maintenanceList.appendChild(maintenanceItem);
-      });
-    } else {
-      maintenanceList.innerHTML = '<li>No active maintenances</li>';
-    }
+    // Update the page status text and color indicator
+    pageStatus.textContent = statusText;
+    statusIndicator.style.backgroundColor = statusColor;
+
   } catch (error) {
     console.error('Error fetching status:', error);
     document.getElementById('page-status').textContent = 'Error fetching status';
+    document.getElementById('status-indicator').style.backgroundColor = '#D9D9D9';  // Grey for error
   }
 }
 
