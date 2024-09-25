@@ -1,4 +1,4 @@
-const apiEndpoint = "https://doofinder.instatus.com/summary.json";
+const apiEndpoint = "https://status.doofinder.com/summary.json";
 const refreshInterval = 60000;  // Adjust the interval as needed
 
 async function fetchStatus() {
